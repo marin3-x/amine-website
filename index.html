@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Character Generation</title>
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+    rel="stylesheet"
+/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #e6e4d5;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .container {
+            background-color:#117f95;
+            max-width: 100%;
+            margin:0px;
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+        }
+        i{
+            color:#0D7C86;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+                gap: 1.5rem;
+            }
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .join-btn {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #0D7C86;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .join-btn:hover {
+            background-color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 3rem;
+            display: grid;
+            
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .title {
+            color: white;
+            font-size: 3rem;
+            font-weight: bold;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .title {
+                font-size: 4.5rem;
+            }
+        }
+
+        .image-container {
+            width:100%;
+            position: relative;
+            right: 0;
+            border-radius: 1.5rem;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .create-btn {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .create-btn:hover {
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        .create-btn::before {
+            content: '';
+            width: 1.5rem;
+            height: 1.5rem;
+            background-color: white;
+            border-radius: 50%;
+        }
+
+        /* Generate Button */
+        .generate-container {
+            position: relative;
+            width: 12rem;
+            aspect-ratio: 1;
+            margin: 0 auto;
+        }
+
+        .generate-btn {
+            position: absolute;
+            text-align: center;
+            inset: 0;
+            margin: auto;
+            width: 8rem;
+            height: 8rem;
+            border-radius: 50%;
+            background-color: white;
+            color: #0D7C86;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 1;
+        }
+        .rotating-text {
+            position: absolute;
+            inset: 0;
+            animation: spin 10s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* App Section */
+        .app-section {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .app-description {
+            margin-top: 0.5rem;
+            color: #666;
+            font-size: 0.875rem;
+        }
+
+        .app-actions {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .store-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .store-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            font-size: 20px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+        }
+
+        .download-btn {
+            background-color: #0D7C86;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dots {
+            position: absolute;
+            right: 0.5rem;
+            top: 0.5rem;
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .dot {
+            width: 4px;
+            height: 4px;
+            background-color: white;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="logo">crypko°</div>
+            <div class="nav-links">
+                <a href="#">Guideline</a>
+                <a href="#">Faq</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Discord</a>
+                <a href="#">Twitter</a>
+            </div>
+            <button class="join-btn">Join Us</button>
+        </nav>
+
+        <div class="main-content">
+            <div>
+                <h1 class="title">ANIME CHARACTER GENERATION</h1>
+                <div class="image-container">
+                    <img src="/image.png" alt="Anime characters in urban setting">
+                    <button class="create-btn">CREATE ANIME</button>
+                </div>
+            </div>
+
+            <div>
+                <div class="generate-container">
+                    <button class="generate-btn">START <br> GENERATE</button>
+                    <svg class="rotating-text" viewBox="0 0 100 100">
+                        <path id="circle" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none"/>
+                        <text font-size="6" fill="white">
+                            <textPath href="#circle">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto rerum rem et asperiores exercitationem praesentium accusantium consequuntur ad accusamus vitae.
+                            </textPath>
+                        </text>
+                    </svg>
+                </div>
+
+                <div class="image-container">
+                    <img src="/anime.jpg" alt="Anime character with goggles">
+                    <div class="dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+
+                <div class="app-section">
+                    <div class="app-header">
+                        <h2 class="app-title">SMARTPHONE APP MEMES</h2>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="1"/>
+                            <circle cx="19" cy="12" r="1"/>
+                            <circle cx="5" cy="12" r="1"/>
+                        </svg>
+                    </div>
+                    <p class="app-description">
+                        The smartphone application MEMES, where Crypko serves as the core
+                        technology behind, is now available in Apple App Store & Google Play.
+                    </p>
+                    <div class="app-actions">
+                        <div class="store-buttons">
+                            <button class="store-btn">
+                                <i class="ri-google-play-fill"></i>
+                            </button>
+                            <button class="store-btn">
+                                <i class="ri-apple-fill"></i>
+                            </button>
+                        </div>
+                        <button class="download-btn">
+                            Download
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add any interactive functionality here
+        document.querySelector('.generate-btn').addEventListener('click', () => {
+            alert('Starting character generation...');
+        });
+
+        document.querySelector('.create-btn').addEventListener('click', () => {
+            alert('Creating new anime character...');
+        });
+
+        document.querySelector('.download-btn').addEventListener('click', () => {
+            alert('Downloading app...');
+        });
+    </script>
+</body>
+</html>
